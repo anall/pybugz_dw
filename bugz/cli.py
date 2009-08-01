@@ -137,7 +137,7 @@ def modify_opt_invalid(opt, opt_str, val, parser):
 class PrettyBugz(Bugz):
 	options = {
 		'base': make_option('-b', '--base', type='string',
-							default = 'https://bugs.gentoo.org/',
+							default = 'http://bugs.dwscoalition.org/',
 							help = 'Base URL of Bugzilla'),
 		'user': make_option('-u', '--user', type='string',
 							help = 'Username for commands requiring authentication'),
@@ -714,14 +714,14 @@ class PrettyBugz(Bugz):
 							help = "Print attachment rather than save")
 	}
 
-	def attach(self, bugid, filename, content_type = 'text/plain', description = None):
+	def attach(self, bugid, filename, content_type = 'text/plain', description = None, patch = False, review = False, commit = False):
 		""" Attach a file to a bug given a filename. """
 		if not os.path.exists(filename):
 			raise BugzError('File not found: %s' % filename)
 		if not description:
 			description = block_edit('Enter description (optional)')
 		result = Bugz.attach(self, bugid, filename, description, filename,
-				content_type)
+				content_type, patch, { 'review': review, 'commit': commit })
 
 	attach.args = "<bugid> <filename> [-c=<mimetype>] [-d=<description>]"
 	attach.options = {
@@ -729,7 +729,11 @@ class PrettyBugz(Bugz):
 									default='text/plain',
 									help = 'Mimetype of the file (default: text/plain)'),
 		'description': make_option('-d', '--description',
-									help = 'A description of the attachment.')
+									help = 'A description of the attachment.'),
+		'patch': make_option('-p', '--patch', help = "Designate this as a patch"),
+		# Dreamwidth specific
+		'review': make_option('-r', '--review', help = 'Request review.'),
+		'commit': make_option('-c', '--commit', help = 'Request commit.'),
 	}
 
 	def listbugs(self, buglist, show_url = False):
@@ -766,11 +770,10 @@ class PrettyBugz(Bugz):
 		print
 		print 'Examples:'
 		print '  bugz get 12345'
-		print '  bugz search python --assigned-to liquidx@gentoo.org'
-		print '  bugz attachment 5000 --view'
-		print '  bugz attach 140574 python-2.4.3.ebuild'
-		print '  bugz modify 140574 -c "Me too"'
-		print '  bugz namedcmd "Amd64 stable"'
+		print '  bugz search python --assigned-to nobody@dreamwidth.org'
+		print '  bugz attachment 345 --view'
+		print '  bugz modify 12345 -c "Me too"'
+		print '  bugz namedcmd "To Do"'
 		print
 		print 'For more information on subcommands, run:'
 		print '  bugz <subcommand> --help'

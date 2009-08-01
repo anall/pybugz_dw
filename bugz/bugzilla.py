@@ -755,7 +755,7 @@ class Bugz:
 		return 0
 
 	def attach(self, bugid, title, description, filename,
-			content_type = 'text/plain'):
+			content_type = 'text/plain', patch = False, flags = {}):
 		"""Attach a file to a bug.
 
 		@param bugid: bug id
@@ -780,6 +780,15 @@ class Bugz:
 		qparams['description'] = title
 		qparams['comment'] = description
 		qparams['contenttypeentry'] = content_type
+		qparams['ispatch'] = patch
+		
+		# Way Dreamwidth specific -- Probably should clean this up somehow
+		qparams['flag_type-1'] = 'X';
+		if flags['review']:
+			qparams['flag_type-1'] = '?';
+		qparams['flag_type-2'] = 'X';
+		if flags['commit']:
+			qparams['flag_type-2'] = '?';
 
 		filedata = [('data', filename, open(filename).read())]
 		content_type, body = encode_multipart_formdata(qparams.items(),

@@ -21,10 +21,11 @@ Classes
 """
 
 __version__ = '0.8.0_rc2'
-__author__ = 'Alastair Tse <http://www.liquidx.net/>'
-__contributors__ = ['Santiago M. Mola <cooldwind@gmail.com']
+__author__ = 'Andrea Nall <anall@andreanall.com>'
+__contributors__ = ['Alastair Tse <http://www.liquidx.net/>', 'Santiago M. Mola <cooldwind@gmail.com']
 __revision__ = '$Id: $'
-__license__ = """Copyright (c) 2006, Alastair Tse, All rights reserved.
+__license__ = """Copyright (c) 2009, Andrea Nall.
+Based on work copyright (c) 2006, Alastair Tse, All rights reserved.
 This following source code is licensed under the GPL v2 License."""
 
 CONFIG_FILE = '.bugz'
